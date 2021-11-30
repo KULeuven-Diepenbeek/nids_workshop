@@ -22,6 +22,14 @@ def bytes_to_int(bytes_array):
     return value
 
 
+def bytes_as_hexstring(bytes_array):
+    """
+    Convert a provided array of bytes into a string of hexadecimal characters.
+    """
+
+    return "".join(["{:02X}".format(b) for b in bytes_array])
+
+
 class Packet:
 
     def __init__(self, bytes_array, label):
@@ -31,6 +39,7 @@ class Packet:
 
         self.__len = bytes_array.shape[0]
         self.__n_bytes = 14 + bytes_to_int(self.__packet[16:18])
+        self.__len_limit = min(self.__len, self.__n_bytes)
 
     def get_label(self):
         """
@@ -63,14 +72,18 @@ class Packet:
         self.__idx = 0
         return self
 
+    def __len__(self):
+        return self.__len_limit
+
     def __next__(self):
-        if self.__idx >= self.__n_bytes:
+        if self.__idx >= self.__len_limit:
             raise StopIteration
-        elif (self.__idx + 4) >= self.__n_bytes:
-            word = self.__packet[self.__idx:self.__n_bytes]
+        elif (self.__idx + 4) >= self.__len_limit:
+            word = self.__packet[self.__idx:self.__len_limit]
         else:
             word = self.__packet[self.__idx:self.__idx + 4]
         self.__idx += 4
+
         return word
 
 
@@ -155,7 +168,7 @@ class NIDSDataset:
         return self[self.current_packet_idx]
 
 
-dset = NIDSDataset()
+#dset = NIDSDataset()
 
 #print(len(dset))
 #print(dset.labels)
