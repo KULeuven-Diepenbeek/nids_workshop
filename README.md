@@ -9,3 +9,8 @@ Inspired by an online [blog-post](https://towardsdatascience.com/tools-for-shari
 ## Feedback
 
 As with all workshops, learning <s>can</s> should happen bidirectionally. If you have any feedback for us (interesting improvements, possible typos, ...) you can find our coordinates on our [contact page](https://iiw.kuleuven.be/onderzoek/ess/contactform).
+
+## Todo
+
+* add UDP frames to the dataset
+* add ARP frames to the dataset, or any other EtherType
