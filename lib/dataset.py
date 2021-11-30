@@ -1,35 +1,6 @@
 import numpy as np
 
 
-def bytes_to_int(bytes_array):
-    """
-    Calculate the integer value that is represented by the provided array of bytes.
-    Example: Input is [8, 0], which represents the hexadecimal 0x0800 number. This function will then calculate
-    8 * 16^2 + 0 * 16^1 = 2048
-
-    :param bytes_array: Array/list of bytes
-    :type bytes_array: ``list`` of ``int``
-    :return: The integer value represented by the array of bytes.
-    :rtype: ``int``
-    """
-    n_bytes = len(bytes_array)
-
-    value = 0
-
-    for i in range(n_bytes):
-        value += (pow(256, n_bytes - i - 1) * bytes_array[i])
-
-    return value
-
-
-def bytes_as_hexstring(bytes_array):
-    """
-    Convert a provided array of bytes into a string of hexadecimal characters.
-    """
-
-    return "".join(["{:02X}".format(b) for b in bytes_array])
-
-
 class Packet:
 
     def __init__(self, bytes_array, label):
@@ -38,8 +9,19 @@ class Packet:
         self.__idx = 0
 
         self.__len = bytes_array.shape[0]
-        self.__n_bytes = 14 + bytes_to_int(self.__packet[16:18])
+        self.__n_bytes = 14 + self.__bytes_to_int(self.__packet[16:18])
         self.__len_limit = min(self.__len, self.__n_bytes)
+
+    @staticmethod
+    def __bytes_to_int(bytes_array):
+        n_bytes = len(bytes_array)
+
+        value = 0
+
+        for i in range(n_bytes):
+            value += (pow(256, n_bytes - i - 1) * bytes_array[i])
+
+        return value
 
     def get_label(self):
         """
@@ -49,24 +31,8 @@ class Packet:
         """
         return self.__label
 
-    def get_data(self):
-        """
-        Get the actual data of the packet.
-        :return: The data of the packet
-        :rtype: numpy.ndarray
-        """
-        return self.__packet
-
-    def packet_as_hexstring(self):
-        """
-        Get the contents of the packet as a hexidecimal string
-        :return: The packet as a hexadecimal string
-        :rtype: ``str``
-        """
-        return "".join(["{:02X}".format(single_byte) for single_byte in self.__packet])
-
     def __str__(self):
-        return "{}, {}B|{}".format(self.__label, self.__n_bytes, self.packet_as_hexstring())
+        return "{} packet".format(self.__label)
 
     def __iter__(self):
         self.__idx = 0
@@ -122,7 +88,7 @@ class NIDSDataset:
         self.__n_packets = self.__packets.shape[0]
         self.__n_bytes = self.__packets.shape[1]
 
-        self.current_packet_idx = 0
+        self.__current_packet_idx = 0
 
     def __get_label(self, label_idx):
 
@@ -137,35 +103,19 @@ class NIDSDataset:
     def __getitem__(self, item):
         return Packet(self.__packets[item][:], self.__get_label(int(self.__labels[item])))
 
-    def get_number_packets(self):
-        """
-        Get the number of packets in the dataset.
-
-        :return: The number of packets in the dataset.
-        """
-        return self.__n_packets
-
-    def get_bytes_per_packet(self):
-        """
-        Get the maximum number of bytes for a packet in the dataset.
-
-        :return: The maximum number of bytes for each packet in the dataset.
-        """
-        return self.__n_bytes
-
     def __iter__(self):
-        self.current_packet_idx = -1
+        self.__current_packet_idx = -1
 
         return self
 
     def __next__(self):
 
-        self.current_packet_idx += 1
+        self.__current_packet_idx += 1
 
-        if self.current_packet_idx == self.__n_packets:
+        if self.__current_packet_idx == self.__n_packets:
             raise StopIteration
 
-        return self[self.current_packet_idx]
+        return self[self.__current_packet_idx]
 
 
 #dset = NIDSDataset()
