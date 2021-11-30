@@ -1,4 +1,33 @@
-from dataset import NIDSDataset, bytes_to_int
+from dataset import NIDSDataset
+
+
+def bytes_to_int(bytes_array):
+    """
+    Calculate the integer value that is represented by the provided array of bytes.
+    Example: Input is [8, 0], which represents the hexadecimal 0x0800 number. This function will then calculate
+    8 * 16^2 + 0 * 16^1 = 2048
+
+    :param bytes_array: Array/list of bytes
+    :type bytes_array: ``list`` of ``int``
+    :return: The integer value represented by the array of bytes.
+    :rtype: ``int``
+    """
+    n_bytes = len(bytes_array)
+
+    value = 0
+
+    for i in range(n_bytes):
+        value += (pow(256, n_bytes - i - 1) * bytes_array[i])
+
+    return value
+
+
+def bytes_as_hexstring(bytes_array):
+    """
+    Convert a provided array of bytes into a string of hexadecimal characters.
+    """
+
+    return "".join(["{:02X}".format(b) for b in bytes_array])
 
 
 def get_flow_id(packet):
