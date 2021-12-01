@@ -1,4 +1,4 @@
-# ES&S workshop - Network Intrusion Detection System
+# Workshop - Network Intrusion Detection System
 
 This GitHub repository is used in the [ESnS](https://iiw.kuleuven.be/onderzoek/ess) workshop: **Network Intrusion Detection System (NIDS)**. In this workshop the participants are guided through an introduction to NIDS using Python. 
 
