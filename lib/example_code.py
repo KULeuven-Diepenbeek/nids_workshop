@@ -1,5 +1,8 @@
 from dataset import NIDSDataset
+from nn_model import get_nn_model
 
+import numpy as np
+import torch
 
 def bytes_to_int(bytes_array):
     """
@@ -56,8 +59,88 @@ def get_flow_id(packet):
 
     return ip_src_addr_str, ip_dst_addr_str, str(bytes_to_int(src_port)), str(bytes_to_int(dst_port)), str(protocol[0])
 
+def test_model():
+    model = get_nn_model()
 
-if __name__ == '__main__':
+    dset = NIDSDataset(packets_file='../data/packets-medium.npy', labels_file='../data/labels-medium.npy')
+
+    label_mapping = [
+        "BENIGN",
+        "Bot",
+        "PortScan",
+        "DDoS",
+        "Web Attack",
+        "Infiltration",
+        "DoS GoldenEye",
+        "DoS Hulk",
+        "DoS Slowhttptest",
+        "DoS slowloris",
+        "Heartbleed",
+        "FTP-Patator",
+        "SSH-Patator",
+    ]
+
+    features_storage = {}
+
+    for packet in dset:
+        counter = 0
+        protocol = ""
+        src_addr = ""
+        dst_addr = ""
+        src_port = ""
+        dst_port = ""
+        packet_header = np.zeros(64)
+
+        for word in packet:
+
+            if counter == 22:
+                protocol = str(bytes_to_int(word[-2:]))
+            elif counter == 26:
+                src_addr = "{}.{}.{}.{}".format(word[0], word[1], word[2], word[3])
+            elif counter == 30:
+                dst_addr = "{}.{}.{}.{}".format(word[0], word[1], word[2], word[3])
+            elif counter == 34:
+                src_port = str(bytes_to_int(word[0:2]))
+                dst_port = str(bytes_to_int(word[2:4]))
+            try:
+                packet_header[counter:counter + 4] = word[:]
+            except ValueError:
+                continue
+            counter += 4
+            if counter == 64:
+                break
+
+        new_fid = "{}|{}-{}-{}-{}-{}".format(packet.get_label(), src_addr, dst_addr, src_port, dst_port, protocol)
+
+        if new_fid in features_storage.keys():
+            features_storage[new_fid].append(packet_header)
+        else:
+            features_storage[new_fid] = [packet_header]
+
+    # Now extract samples from the dictionary
+    for flow_id, features in features_storage.items():
+        n_samples = len(features)
+        label = flow_id.split('|')[0]
+
+        for i in range(0, n_samples, 5):
+
+            input_sample = np.zeros((5, 64))
+            if n_samples - i < 5:
+                input_sample[:n_samples - i] = features[i:]
+            else:
+                input_sample[:] = features[i:i+5]
+
+            # input_sample = input_sample.reshape(1, -1)
+
+            input_tensor = torch.from_numpy(input_sample)
+            input_tensor = input_tensor.view(1, 1, 320)
+
+            output_tensor = model(input_tensor.float())
+            _, predicted = torch.max(output_tensor, 1)
+            print(label_mapping[predicted[0]], label)
+
+
+def test_flow_id_extraction():
     dset = NIDSDataset(packets_file='packets-medium.npy', labels_file='labels-medium.npy')
     flow_ids = {}
     for packet in dset:
@@ -70,3 +153,7 @@ if __name__ == '__main__':
 
     for key, item in flow_ids.items():
         print("{}: {}".format(key, item))
+
+
+if __name__ == '__main__':
+    test_model()
