@@ -1,4 +1,4 @@
-# ES&S workshop - Network Intrusion Detection System
+# Workshop - Network Intrusion Detection System
 
 This GitHub repository is used in the [ESnS](https://iiw.kuleuven.be/onderzoek/ess) workshop: **Network Intrusion Detection System (NIDS)**. In this workshop the participants are guided through an introduction to NIDS using Python. 
 
@@ -9,3 +9,8 @@ Inspired by an online [blog-post](https://towardsdatascience.com/tools-for-shari
 ## Feedback
 
 As with all workshops, learning <s>can</s> should happen bidirectionally. If you have any feedback for us (interesting improvements, possible typos, ...) you can find our coordinates on our [contact page](https://iiw.kuleuven.be/onderzoek/ess/contactform).
+
+## Todo
+
+* add UDP frames to the dataset
+* add ARP frames to the dataset, or any other EtherType
