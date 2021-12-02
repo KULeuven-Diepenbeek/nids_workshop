@@ -155,5 +155,43 @@ def test_flow_id_extraction():
         print("{}: {}".format(key, item))
 
 
+def list_protocols():
+    dset = NIDSDataset(packets_file='../data/dataset_packets_v1.npy', labels_file='../data/dataset_labels_v1.npy')
+
+    protocols = {}
+
+    for packet in dset:
+        counter = 0
+        ethertype = ""
+
+        for word in packet:
+            if counter == 12:
+                ethertype = str(bytes_to_int(word[:2]))
+
+            print(word)
+            if ethertype == "2048":
+                if counter == 20:
+                    protocol = str(bytes_to_int(word[3:]))
+                    print("Protocol: ", protocol)
+                    final_protocol = ethertype + "-" + protocol
+                    if final_protocol in protocols.keys():
+                        protocols[final_protocol] += 1
+                    else:
+                        protocols[final_protocol] = 1
+                    break
+            elif ethertype != "":
+                final_protocol = ethertype
+                if final_protocol in protocols.keys():
+                    protocols[final_protocol] += 1
+                else:
+                    protocols[final_protocol] = 1
+                break
+            counter += 4
+            if counter == 64:
+                break
+    print(protocols)
+
+
 if __name__ == '__main__':
-    test_model()
+    #test_model()
+    list_protocols()
