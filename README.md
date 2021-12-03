@@ -12,5 +12,8 @@ As with all workshops, learning <s>can</s> should happen bidirectionally. If you
 
 ## Todo
 
-* add UDP frames to the dataset
-* add ARP frames to the dataset, or any other EtherType
+* <s>add UDP frames to the dataset</s>
+* <s>add ARP frames to the dataset, or any other EtherType</s>
+* <s>create a private repo with solutions</s>
+* verify that all links to "next notebook" are correct
+* verify that all **expected solution values** are correct (wrt the used dataset)
