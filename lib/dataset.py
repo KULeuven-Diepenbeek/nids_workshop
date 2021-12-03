@@ -9,7 +9,12 @@ class Packet:
         self.__idx = 0
 
         self.__len = bytes_array.shape[0]
-        self.__n_bytes = 14 + self.__bytes_to_int(self.__packet[16:18])
+
+        self.__ethertype = self.__bytes_to_int(self.__packet[12:14])
+        if self.__ethertype == 0x0800:
+            self.__n_bytes = 14 + self.__bytes_to_int(self.__packet[16:18])
+        else:
+            self.__n_bytes = 14 + 28
         self.__len_limit = min(self.__len, self.__n_bytes)
 
     @staticmethod
