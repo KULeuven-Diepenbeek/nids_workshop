@@ -4,6 +4,7 @@ from nn_model import get_nn_model
 import numpy as np
 import torch
 
+
 def bytes_to_int(bytes_array):
     """
     Calculate the integer value that is represented by the provided array of bytes.
