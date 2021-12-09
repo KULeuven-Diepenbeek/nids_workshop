@@ -15,6 +15,14 @@ If you prefer running the exercises on your own system, we provide two alternati
 
 As with all workshops, learning <s>can</s> should happen bidirectionally. If you have any feedback for us (interesting improvements, possible typos, ...) you can find our coordinates on our [contact page](https://iiw.kuleuven.be/onderzoek/ess/contactform).
 
+## Installation notes
+
+Install instructions pip (linux):
+
+* sudo pip install jupyterlab
+* sudo pip install numpy matplotlib sklearn
+* sudo pip install torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+
 ## Todo
 
 * <s>add UDP frames to the dataset</s>
