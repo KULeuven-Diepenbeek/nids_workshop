@@ -23,6 +23,8 @@ Install instructions pip (linux):
 * sudo pip install numpy matplotlib sklearn
 * sudo pip install torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
 
+Please note that for your system, you might need to use *pip3* rather than *pip*.
+
 ## Todo
 
 * <s>add UDP frames to the dataset</s>
