@@ -9,7 +9,7 @@ Inspired by an online [blog-post](https://towardsdatascience.com/tools-for-shari
 If you prefer running the exercises on your own system, we provide two alternatives:
 * If you have docker installed, and are able to [run it without root](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user), you can simply start you own docker container by executing *run_docker.sh*:
 ```$ ./run_docker.sh```
-* If you prefer to run everything natively, we have provided an *environment.yml* file that contains all necessary Python packages. You can choose to use it directly with *conda*, or to manually check that all the packages are installed.
+* If you prefer to run everything natively, we have provided an *environment.yml* file that contains all necessary Python packages. You can choose to use it directly with *conda*, or to manually check that all the packages are installed. When everything in correctly installed, you can start the notebook from within the repository with *jupyter notebook*.
 
 ## Feedback
 
