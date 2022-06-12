@@ -32,4 +32,4 @@ Please note that for your system, you might need to use *pip3* rather than *pip*
 * <s>create a private repo with solutions</s>
 * verify that all links to "next notebook" are correct
 * verify that all **expected solution values** are correct (wrt the used dataset)
-* rename this repo so it sits closer to the solution-repo name
+* <s>rename this repo so it sits closer to the solution-repo name</s>
